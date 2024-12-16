@@ -1,7 +1,4 @@
 #include "jsonParse.h"
-#include <stdlib.h>
-
-
 
 char* loadJSON(char* filename){
 
@@ -26,11 +23,7 @@ char* loadJSON(char* filename){
     }
 
     return jsonContent;
-
 }
-
-
-
 
 
 
