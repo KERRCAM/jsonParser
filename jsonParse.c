@@ -45,6 +45,8 @@ void validateJSON(char* rawJSON){
     if first char is a [ then check for array feed
     */
 
+    //validJSON = whitespace? (array or object) whitespace? validJSON*
+
 }
 
 
@@ -58,7 +60,7 @@ void charAdvance(){
 
 void consumeWhiteSpace(){
 
-    // (space* or linefeed* or carriageReturn* or horizontalTab*)*
+    // (space* linefeed* carriageReturn* horizontalTab*)*
 
 }
 
