@@ -1,10 +1,18 @@
 #include "jsonParse.h"
 
-
-
 //TODO -> all methods currently void -> not their actual types, just a temporary placeholder
 
+// ------------------------------------------------------------------------ //
 
+validatorS* initValidator(){
+
+    validatorS* validator = calloc(1, sizeof(struct VALIDATOR_STRUCT));
+    validator -> i = 0;
+
+    return validator;
+}
+
+// ------------------------------------------------------------------------ //
 
 char* loadJSON(char* filename){ // could do with some refactoring
 
@@ -31,6 +39,15 @@ char* loadJSON(char* filename){ // could do with some refactoring
     return jsonContent;
 }
 
+// ------------------------------------------------------------------------ //
+
+char* loadJSONStaggered(char* filename, int lastRead){ // maybe needed maybe not
+
+    // read only one chunk at once that could be valid and pass it to validation
+
+}
+
+// ------------------------------------------------------------------------ //
 
 void validateJSON(char* rawJSON){
 
@@ -49,6 +66,7 @@ void validateJSON(char* rawJSON){
 
 }
 
+// ------------------------------------------------------------------------ //
 
 void charAdvance(){
 
@@ -57,6 +75,7 @@ void charAdvance(){
 
 }
 
+// ------------------------------------------------------------------------ //
 
 void consumeWhiteSpace(){
 
@@ -64,6 +83,7 @@ void consumeWhiteSpace(){
 
 }
 
+// ------------------------------------------------------------------------ //
 
 void consumeString(){
 
@@ -77,6 +97,11 @@ void consumeString(){
 
 }
 
+// ------------------------------------------------------------------------ //
+
+
+
+// ------------------------------------------------------------------------ //
 
 void consumeNumber(){
 
@@ -84,6 +109,7 @@ void consumeNumber(){
 
 }
 
+// ------------------------------------------------------------------------ //
 
 void consumeBool(){
 
@@ -91,6 +117,7 @@ void consumeBool(){
 
 }
 
+// ------------------------------------------------------------------------ //
 
 void consumeNull(){
 
@@ -98,6 +125,7 @@ void consumeNull(){
 
 }
 
+// ------------------------------------------------------------------------ //
 
 void consumeObject(){
 
@@ -105,6 +133,7 @@ void consumeObject(){
 
 }
 
+// ------------------------------------------------------------------------ //
 
 void consumeArray(){
 
@@ -112,6 +141,7 @@ void consumeArray(){
 
 }
 
+// ------------------------------------------------------------------------ //
 
 void consumeValue(){
 
@@ -119,6 +149,7 @@ void consumeValue(){
 
 }
 
+// ------------------------------------------------------------------------ //
 
 int main(){
 
@@ -131,3 +162,5 @@ int main(){
     return 0;
 
 }
+
+// ------------------------------------------------------------------------ //
