@@ -4,10 +4,11 @@
 
 // ------------------------------------------------------------------------ //
 
-validatorS* initValidator(){
+validatorS* initValidator(char* jsonContent){
 
     validatorS* validator = calloc(1, sizeof(struct VALIDATOR_STRUCT));
     validator -> i = 0;
+    validator -> rawJSON = jsonContent;
 
     return validator;
 }
@@ -45,6 +46,8 @@ char* loadJSONStaggered(char* filename, int lastRead){ // maybe needed maybe not
 
     // read only one chunk at once that could be valid and pass it to validation
 
+    return filename;
+
 }
 
 // ------------------------------------------------------------------------ //
@@ -68,18 +71,27 @@ void validateJSON(char* rawJSON){
 
 // ------------------------------------------------------------------------ //
 
-void charAdvance(){
+char charAdvance(validatorS* validator){ //make it get rawJSOn and not it be a param
 
     //currPos + 1
     //update currChar
+
+    validator -> i += 1;
+    char currChar = validator -> rawJSON[validator -> i];
+
+    return currChar;
 
 }
 
 // ------------------------------------------------------------------------ //
 
-void consumeWhiteSpace(){
+void consumeWhiteSpace(validatorS* validator, char currChar){
 
     // (space* linefeed* carriageReturn* horizontalTab*)*
+
+    if (currChar == ' ' || currChar == '\n' || currChar == '\r' || currChar == '\t'){ //need to fix types
+        charAdvance(validator);
+    }
 
 }
 
