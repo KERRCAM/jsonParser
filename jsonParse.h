@@ -8,6 +8,7 @@
 typedef struct VALIDATOR_STRUCT{
     int i;
     char* rawJSON;
+    char currChar;
 } validatorS;
 
 typedef struct JSON_STRUCT{

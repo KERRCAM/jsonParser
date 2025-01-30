@@ -9,6 +9,7 @@ validatorS* initValidator(char* jsonContent){
     validatorS* validator = calloc(1, sizeof(struct VALIDATOR_STRUCT));
     validator -> i = 0;
     validator -> rawJSON = jsonContent;
+    validator -> currChar = jsonContent[validator -> i];
 
     return validator;
 }
