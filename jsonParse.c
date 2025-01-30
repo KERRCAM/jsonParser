@@ -53,44 +53,25 @@ char* loadJSONStaggered(char* filename, int lastRead){ // maybe needed maybe not
 
 // ------------------------------------------------------------------------ //
 
-void validateJSON(char* rawJSON){
-
-    /*
-    follow general json BNF diagrams for validation
-    -> also can work similarly to code lexing for efficient processing later
-    -> avoid regex if possible -> take more manual approach
-    */
-
-    /*
-    if first char is a { then check for object feed
-    if first char is a [ then check for array feed
-    */
-
-    //validJSON = whitespace? (array or object) whitespace? validJSON*
-
-}
-
-// ------------------------------------------------------------------------ //
-
-char charAdvance(validatorS* validator){ //make it get rawJSOn and not it be a param
+void charAdvance(validatorS* validator){ //make it get rawJSOn and not it be a param
 
     //currPos + 1
     //update currChar
 
     validator -> i += 1;
-    char currChar = validator -> rawJSON[validator -> i];
-
-    return currChar;
+    validator -> currChar = validator -> rawJSON[validator -> i];
 
 }
 
 // ------------------------------------------------------------------------ //
 
-void consumeWhiteSpace(validatorS* validator, char currChar){
+void consumeWhiteSpace(validatorS* validator){
 
     // (space* linefeed* carriageReturn* horizontalTab*)*
 
-    if (currChar == ' ' || currChar == '\n' || currChar == '\r' || currChar == '\t'){ //need to fix types
+    char c = validator -> currChar;
+
+    while (c == ' ' || c == '\n' || c == '\r' || c == '\t'){ //need to fix types
         charAdvance(validator);
     }
 
@@ -109,10 +90,6 @@ void consumeString(){
     //\u = hex?
 
 }
-
-// ------------------------------------------------------------------------ //
-
-
 
 // ------------------------------------------------------------------------ //
 
@@ -164,11 +141,40 @@ void consumeValue(){
 
 // ------------------------------------------------------------------------ //
 
+void validateJSON(validatorS* validator){
+
+    /*
+    follow general json BNF diagrams for validation
+    -> also can work similarly to code lexing for efficient processing later
+    -> avoid regex if possible -> take more manual approach
+    */
+
+    /*
+    if first char is a { then check for object feed
+    if first char is a [ then check for array feed
+    */
+
+    //validJSON = whitespace? (array or object) whitespace? validJSON*
+
+    char c = validator -> currChar;
+
+    if (c == ' ' || c == '\n' || c == '\r' || c == '\t'){ //need to fix types
+        consumeWhiteSpace(validator);
+    }
+
+}
+
+// ------------------------------------------------------------------------ //
+
 int main(){
 
     char* filename = "test.json";
 
     char* jsonContent = loadJSON(filename);
+
+    validatorS* validator = initValidator(jsonContent);
+
+    validateJSON(validator);
 
     printf("%s\n", jsonContent);
 
