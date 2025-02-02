@@ -80,21 +80,21 @@ void consumeWhiteSpace(validatorS* validator){
 
 // ------------------------------------------------------------------------ //
 
-void consumeString(){
+void consumeString(validatorS* validator){
 
     // startQuote (anyCharBut\* (\ any of -> quotes / \ b n f r t (u 4 hex digits)))  endQuote
-    //\b = backspace
-    //\n = new line -> linefeed
-    //\f = formfeed
-    //\r = carriage return
-    //\t = horizontal tab
-    //\u = hex?
+    // \b = backspace
+    // \n = new line -> linefeed
+    // \f = formfeed
+    // \r = carriage return
+    // \t = horizontal tab
+    // \u = hex?
 
 }
 
 // ------------------------------------------------------------------------ //
 
-void consumeNumber(){
+void consumeNumber(validatorS* validator){
 
     // number = -? [1..9] [0..9]* (. [0..9]*)? (e or E - or + [0..9]*)
 
@@ -102,7 +102,7 @@ void consumeNumber(){
 
 // ------------------------------------------------------------------------ //
 
-void consumeBool(){
+void consumeBool(validatorS* validator){
 
    //bool = true or false
 
@@ -110,7 +110,7 @@ void consumeBool(){
 
 // ------------------------------------------------------------------------ //
 
-void consumeNull(){
+void consumeNull(validatorS* validator){
 
     //null = null
 
@@ -118,7 +118,7 @@ void consumeNull(){
 
 // ------------------------------------------------------------------------ //
 
-void consumeObject(){
+void consumeObject(validatorS* validator){
 
     //object = startCurly whitespace or (whitespace string whitespace? colon whitespace? value comma object*) endCurly
 
@@ -126,7 +126,7 @@ void consumeObject(){
 
 // ------------------------------------------------------------------------ //
 
-void consumeArray(){
+void consumeArray(validatorS* validator){
 
     //array = startSquare whitespace or (value comma)* endSquare
 
@@ -134,7 +134,7 @@ void consumeArray(){
 
 // ------------------------------------------------------------------------ //
 
-void consumeValue(){
+void consumeValue(validatorS* validator){
 
     //value = whitespace? object or array or string or number or bool or null whitespace?
 
@@ -157,9 +157,10 @@ void validateJSON(validatorS* validator){
 
     //validJSON = whitespace? (array or object) whitespace? validJSON*
 
-    char c = validator -> currChar;
-
-    if (c == ' ' || c == '\n' || c == '\r' || c == '\t'){ //need to fix types
+    if (   validator -> currChar == ' '
+        || validator -> currChar == '\n'
+        || validator -> currChar == '\r'
+        || validator -> currChar == '\t'){ //need to fix types
         consumeWhiteSpace(validator);
     }
 
