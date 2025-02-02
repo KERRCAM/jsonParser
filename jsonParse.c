@@ -69,9 +69,10 @@ void consumeWhiteSpace(validatorS* validator){
 
     // (space* linefeed* carriageReturn* horizontalTab*)*
 
-    char c = validator -> currChar;
-
-    while (c == ' ' || c == '\n' || c == '\r' || c == '\t'){ //need to fix types
+    while (    validator -> currChar == ' '
+            || validator -> currChar == '\n'
+            || validator -> currChar == '\r'
+            || validator -> currChar == '\t'){ //need to fix types
         charAdvance(validator);
     }
 
