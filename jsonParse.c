@@ -94,9 +94,43 @@ void consumeString(validatorS* validator){
 
 // ------------------------------------------------------------------------ //
 
-void consumeNumber(validatorS* validator){
+void consumeInt(validatorS* validator){
+
+    while(isdigit(validator -> currChar)){
+        charAdvance(validator);
+    }
+
+}
+
+// ------------------------------------------------------------------------ //
+
+void consumeNumber(validatorS* validator){ // GETTING COMPILER WARNING
 
     // number = -? [1..9] [0..9]* (. [0..9]*)? (e or E - or + [0..9]*)
+    if (validator -> currChar == '-'){
+        charAdvance(validator);
+
+        if (isdigit(validator -> currChar) == false){
+            //throw numerical error
+        }
+    }
+
+    consumeInt(validator);
+
+    if (validator -> currChar == 'e' || validator -> currChar == 'E'){
+        charAdvance(validator);
+
+        if (validator -> currChar != '+' || validator -> currChar != "-"){
+            //throw numerical error
+        }
+
+        if (isdigit(validator -> currChar) == false){
+            //throw numerical error
+        }
+
+    }
+
+    // return error if one occurred
 
 }
 
