@@ -1,5 +1,10 @@
 #include "jsonParse.h"
 
+enum error {
+    INVALID_NUMBER,
+    INVALID_STRING,
+};
+
 //TODO -> all methods currently void -> not their actual types, just a temporary placeholder
 
 // ------------------------------------------------------------------------ //
@@ -112,6 +117,8 @@ void consumeNumber(validatorS* validator){ // GETTING COMPILER WARNING
 
         if (isdigit(validator -> currChar) == false){
             //throw numerical error
+        } else{
+            consumeInt(validator);
         }
     }
 
@@ -120,12 +127,16 @@ void consumeNumber(validatorS* validator){ // GETTING COMPILER WARNING
     if (validator -> currChar == 'e' || validator -> currChar == 'E'){
         charAdvance(validator);
 
-        if (validator -> currChar != '+' || validator -> currChar != "-"){
+        if (validator -> currChar != '+' || validator -> currChar != '-'){
             //throw numerical error
+        } else{
+            charAdvance(validator);
         }
 
         if (isdigit(validator -> currChar) == false){
             //throw numerical error
+        } else{
+            consumeInt(validator);
         }
 
     }
