@@ -183,13 +183,11 @@ void consumeArray(validatorS* validator){
 
     //array = startSquare whitespace or (value comma)* endSquare
 
-    if (validator -> currChar == '['){
-        consumeWhiteSpace(validator);
-        while (validator -> currChar != ']'){
-            consumeValue(validator);
-            if (validator -> currChar == ','){
-                charAdvance(validator);
-            }
+    consumeWhiteSpace(validator); // check for first char being '[' has already been done
+    while (validator -> currChar != ']'){
+        consumeValue(validator);
+        if (validator -> currChar == ','){
+            charAdvance(validator);
         }
     }
 
@@ -199,25 +197,17 @@ void consumeArray(validatorS* validator){
 
 void validateJSON(validatorS* validator){
 
-    /*
-    follow general json BNF diagrams for validation
-    -> also can work similarly to code lexing for efficient processing later
-    -> avoid regex if possible -> take more manual approach
-    */
-
-    /*
-    if first char is a { then check for object feed
-    if first char is a [ then check for array feed
-    */
-
     //validJSON = whitespace? (array or object) whitespace? validJSON*
 
-    if (   validator -> currChar == ' '
-        || validator -> currChar == '\n'
-        || validator -> currChar == '\r'
-        || validator -> currChar == '\t'){ //need to fix types
-        consumeWhiteSpace(validator);
+    consumeWhiteSpace(validator);
+
+    if (validator -> currChar == '{'){
+        consumeObject(validator);
+    } else if (validator -> currChar == '['){
+        consumeArray(validator);
     }
+
+    consumeWhiteSpace(validator);
 
 }
 
