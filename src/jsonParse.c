@@ -171,17 +171,27 @@ void consumeObject(validatorS* validator){
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeArray(validatorS* validator){
+void consumeValue(validatorS* validator){
 
-    //array = startSquare whitespace or (value comma)* endSquare
+    //value = whitespace? object or array or string or number or bool or null whitespace?
 
 }
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeValue(validatorS* validator){
+void consumeArray(validatorS* validator){
 
-    //value = whitespace? object or array or string or number or bool or null whitespace?
+    //array = startSquare whitespace or (value comma)* endSquare
+
+    if (validator -> currChar == '['){
+        consumeWhiteSpace(validator);
+        while (validator -> currChar != ']'){
+            consumeValue(validator);
+            if (validator -> currChar == ','){
+                charAdvance(validator);
+            }
+        }
+    }
 
 }
 
