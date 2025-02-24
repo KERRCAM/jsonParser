@@ -163,17 +163,42 @@ void consumeNull(validatorS* validator){
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeObject(validatorS* validator){
+void consumeValue(validatorS* validator){
 
-    //object = startCurly whitespace or (whitespace string whitespace? colon whitespace? value comma object*) endCurly
+    //value = whitespace? object or array or string or number or bool or null whitespace?
+
+    consumeWhiteSpace(validator);
+
+    switch (validator -> currChar){
+    case ('"'):
+        consumeString(validator);
+        break;
+    case ('{'):
+        consumeObject(validator);
+        break;
+    case ('['):
+        consumeArray(validator);
+        break;
+    case ('t' | 'f'):
+        consumeBool(validator);
+        break;
+    case ('n'):
+        consumeNull(validator);
+        break;
+    default:
+        consumeNumber(validator);
+        break;
+    }
+
+    consumeWhiteSpace(validator);
 
 }
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeValue(validatorS* validator){
+void consumeObject(validatorS* validator){
 
-    //value = whitespace? object or array or string or number or bool or null whitespace?
+    //object = startCurly whitespace or (whitespace string whitespace? colon whitespace? value comma object*) endCurly
 
 }
 
