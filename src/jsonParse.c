@@ -1,4 +1,4 @@
-#include "jsonParse.h"
+#include "include/jsonParse.h"
 
 enum error {
     INVALID_NUMBER,
@@ -215,7 +215,7 @@ void validateJSON(validatorS* validator){
 
 int main(){
 
-    char* filename = "test.json";
+    char* filename = "testFiles/test.json";
 
     char* jsonContent = loadJSON(filename);
 

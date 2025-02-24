@@ -1,8 +1,10 @@
 
 
-
 build:
-	gcc jsonParse.c -o test
+	gcc jsonParse.c -o parser
 
 run:
-	./test
+	./parser
+
+clean:
+	rm parser
