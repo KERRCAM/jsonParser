@@ -1,7 +1,7 @@
 
 
 build:
-	gcc jsonParse.c -o parser
+	gcc src/*.c -o parser
 
 run:
 	./parser

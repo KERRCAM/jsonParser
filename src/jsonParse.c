@@ -215,13 +215,13 @@ void validateJSON(validatorS* validator){
 
 int main(){
 
-    char* filename = "testFiles/test.json";
+    char* filename = "src/testFiles/test.json";
 
     char* jsonContent = loadJSON(filename);
 
     validatorS* validator = initValidator(jsonContent);
 
-    validateJSON(validator);
+    validateJSON(validator); // seg error
 
     printf("%s\n", jsonContent);
 
