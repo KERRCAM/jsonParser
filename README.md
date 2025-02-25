@@ -1,8 +1,6 @@
 
-# JSON C parser
-There is likely better alternatives but this is a library for parsing JSON files into C data structures.
-
-I personally have had issues doing this with other libraries on apple silicon so this aims to fill that gap using nothing system specific.
-
-Should result in less features but a more lightweight and more portable library for using JSON with C.
+# JSON Parser for C
+Working towards being a lightweight and easy to use C library
+for parsing large (or small) JSON files into workable C data
+structures for use in your programs.
 

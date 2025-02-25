@@ -1,10 +1,10 @@
 
 
 build:
-	gcc src/*.c -o parser
+	gcc src/*.c -o buildTest/parser
 
 run:
-	./parser
+	./buildTest/parser
 
 clean:
-	rm parser
+	rm buildTest/parser

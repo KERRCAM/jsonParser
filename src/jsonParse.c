@@ -5,7 +5,8 @@ enum error {
     INVALID_STRING,
 };
 
-//TODO -> all methods currently void -> not their actual types, just a temporary placeholder
+// TODO -> add license once there is a working version, remove vs code folder too
+// Will get everything working initially then refactor everything for clarity and efficiency
 
 // --------------------------------------------------------------------------------------------- //
 
@@ -246,7 +247,7 @@ int main(){
 
     validatorS* validator = initValidator(jsonContent);
 
-    validateJSON(validator); // seg error
+    validateJSON(validator);
 
     printf("%s\n", jsonContent);
 
