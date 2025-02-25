@@ -96,6 +96,22 @@ void consumeString(validatorS* validator){
     // \t = horizontal tab
     // \u = hex?
 
+    charAdvance(validator);
+    while (  validator -> currChar != '"'
+            || validator -> currChar != '\b'
+            || validator -> currChar != '\n'
+            || validator -> currChar != '\f'
+            || validator -> currChar != '\r'
+            || validator -> currChar != '\t'
+        ){
+            charAdvance(validator);
+        } // could just go forever and get seg error, needs to be handled
+
+    if (validator -> currChar != '"'){
+        // throw invalid string error
+    }
+
+
 }
 
 // --------------------------------------------------------------------------------------------- //
@@ -152,6 +168,8 @@ void consumeBool(validatorS* validator){
 
    //bool = true or false
 
+
+
 }
 
 // --------------------------------------------------------------------------------------------- //
@@ -159,6 +177,8 @@ void consumeBool(validatorS* validator){
 void consumeNull(validatorS* validator){
 
     //null = null
+
+
 
 }
 
