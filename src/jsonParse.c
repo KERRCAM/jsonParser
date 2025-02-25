@@ -228,7 +228,35 @@ void consumeValue(validatorS* validator){
 
 void consumeObject(validatorS* validator){
 
-    //object = startCurly whitespace or (whitespace string whitespace? colon whitespace? value comma object*) endCurly
+    //object = startCurly whitespace or
+    //         (whitespace string whitespace? colon whitespace? value comma object*) endCurly
+
+    charAdvance(validator);
+    consumeWhiteSpace(validator);
+
+    if (validator -> currChar == '}'){
+        charAdvance(validator);
+        return;
+    }
+
+    while (true){
+        consumeString(validator);
+
+        if (validator -> currChar == ':'){
+            charAdvance(validator);
+        } // else throw invalid object error
+
+            consumeWhiteSpace(validator);
+            consumeValue(validator);
+
+            if (validator -> currChar == ','){
+                charAdvance(validator);
+            } else if (validator -> currChar == '}'){
+                charAdvance(validator);
+                return;
+            } // else throw invalid object error
+    }
+
 
 }
 
