@@ -168,7 +168,14 @@ void consumeBool(validatorS* validator){
 
    //bool = true or false
 
+    int loops = 4;
+    if (validator -> currChar == 'f'){
+        loops++;
+    }
 
+    for (int i = 0; i < loops; i++){
+        charAdvance(validator);
+    }
 
 }
 
@@ -178,7 +185,9 @@ void consumeNull(validatorS* validator){
 
     //null = null
 
-
+    for (int i = 0; i < 4; i++){
+        charAdvance(validator);
+    }
 
 }
 
