@@ -19,7 +19,7 @@ validatorS* initValidator(char* jsonContent);
 
 char* loadJSON(char* filename);
 
-char* loadJSONStaggered(char* filename, int lastRead);
+char* loadJsonStaggered(char* filename, int lastRead);
 
 void charAdvance(validatorS* validator);
 

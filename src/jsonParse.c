@@ -15,7 +15,7 @@ validatorS* initValidator(char* jsonContent){
     validatorS* validator = calloc(1, sizeof(struct VALIDATOR_STRUCT));
     validator -> i = 0;
     validator -> rawJSON = jsonContent;
-    validator -> currChar = jsonContent[validator -> i];
+    validator -> currChar = jsonContent[0];
 
     return validator;
 }
@@ -44,12 +44,14 @@ char* loadJSON(char* filename){ // could do with some refactoring
         jsonContent = buffer;
     }
 
+    //free(buffer);
+
     return jsonContent;
 }
 
 // --------------------------------------------------------------------------------------------- //
 
-char* loadJSONStaggered(char* filename, int lastRead){ // maybe needed maybe not
+char* loadJsonStaggered(char* filename, int lastRead){ // maybe needed maybe not
 
     // read only one chunk at once that could be valid and pass it to validation
 
@@ -96,21 +98,22 @@ void consumeString(validatorS* validator){
     // \t = horizontal tab
     // \u = hex?
 
-    charAdvance(validator);
+    /*
     while (  validator -> currChar != '"'
-            || validator -> currChar != '\b'
-            || validator -> currChar != '\n'
-            || validator -> currChar != '\f'
-            || validator -> currChar != '\r'
-            || validator -> currChar != '\t'
-        ){
-            charAdvance(validator);
-        } // could just go forever and get seg error, needs to be handled
+        || validator -> currChar != '\b'
+        || validator -> currChar != '\n'
+        || validator -> currChar != '\f'
+        || validator -> currChar != '\r'
+        || validator -> currChar != '\t'
+    )*/
 
-    if (validator -> currChar != '"'){
-        // throw invalid string error
-    }
+    charAdvance(validator);
 
+    while (validator -> currChar != '"'){
+        charAdvance(validator);
+    } // could just go forever and get seg error, needs to be handled
+
+    charAdvance(validator);
 
 }
 
@@ -200,24 +203,24 @@ void consumeValue(validatorS* validator){
     consumeWhiteSpace(validator);
 
     switch (validator -> currChar){
-    case ('"'):
-        consumeString(validator);
-        break;
-    case ('{'):
-        consumeObject(validator);
-        break;
-    case ('['):
-        consumeArray(validator);
-        break;
-    case ('t' | 'f'):
-        consumeBool(validator);
-        break;
-    case ('n'):
-        consumeNull(validator);
-        break;
-    default:
-        consumeNumber(validator);
-        break;
+        case ('"'):
+            consumeString(validator);
+            break;
+        case ('{'):
+            consumeObject(validator);
+            break;
+        case ('['):
+            consumeArray(validator);
+            break;
+        case ('t' | 'f'):
+            consumeBool(validator);
+            break;
+        case ('n'):
+            consumeNull(validator);
+            break;
+        default:
+            consumeNumber(validator);
+            break;
     }
 
     consumeWhiteSpace(validator);
@@ -240,23 +243,28 @@ void consumeObject(validatorS* validator){
     }
 
     while (true){
+        printf("%c\n", validator -> currChar);
+        printf("%s\n", "test");
         consumeString(validator);
+        printf("%s\n", "test2");
+        consumeWhiteSpace(validator);
 
         if (validator -> currChar == ':'){
             charAdvance(validator);
         } // else throw invalid object error
 
+        consumeWhiteSpace(validator);
+        consumeValue(validator);
+
+        if (validator -> currChar == ','){
+            charAdvance(validator);
             consumeWhiteSpace(validator);
-            consumeValue(validator);
-
-            if (validator -> currChar == ','){
-                charAdvance(validator);
-            } else if (validator -> currChar == '}'){
-                charAdvance(validator);
-                return;
-            } // else throw invalid object error
+        } else if (validator -> currChar == '}'){
+            consumeWhiteSpace(validator);
+            charAdvance(validator);
+            return;
+        } // else throw invalid object error
     }
-
 
 }
 
@@ -266,13 +274,17 @@ void consumeArray(validatorS* validator){
 
     //array = startSquare whitespace or (value comma)* endSquare
 
+    charAdvance(validator);
     consumeWhiteSpace(validator); // check for first char being '[' has already been done
     while (validator -> currChar != ']'){
         consumeValue(validator);
         if (validator -> currChar == ','){
             charAdvance(validator);
+            consumeWhiteSpace(validator);
         }
     }
+
+    charAdvance(validator);
 
 }
 
