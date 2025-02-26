@@ -3,6 +3,9 @@
 enum error {
     INVALID_NUMBER,
     INVALID_STRING,
+    INVALID_ARRAY,
+    INVALID_OBJECT,
+    INVALID_JSON
 };
 
 // TODO -> add license once there is a working version, remove vs code folder too
