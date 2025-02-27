@@ -31,9 +31,7 @@ void consumeInt(validatorS* validator);
 
 void consumeNumber(validatorS* validator);
 
-void consumeBool(validatorS* validator);
-
-void consumeNull(validatorS* validator);
+void consumeKeyword(validatorS* validator, int length);
 
 void consumeValue(validatorS* validator);
 

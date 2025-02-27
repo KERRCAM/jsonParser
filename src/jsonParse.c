@@ -170,28 +170,11 @@ void consumeNumber(validatorS* validator){ // GETTING COMPILER WARNING
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeBool(validatorS* validator){
+void consumeKeyword(validatorS* validator, int length){
 
    //bool = true or false
 
-    int loops = 4;
-    if (validator -> currChar == 'f'){
-        loops++;
-    }
-
-    for (int i = 0; i < loops; i++){
-        charAdvance(validator);
-    }
-
-}
-
-// --------------------------------------------------------------------------------------------- //
-
-void consumeNull(validatorS* validator){
-
-    //null = null
-
-    for (int i = 0; i < 4; i++){
+    for (int i = 0; i < length; i++){
         charAdvance(validator);
     }
 
@@ -215,11 +198,14 @@ void consumeValue(validatorS* validator){
         case ('['):
             consumeArray(validator);
             break;
-        case ('t' | 'f'):
-            consumeBool(validator);
+        case ('t'):
+            consumeKeyword(validator, 4);
+            break;
+        case ('f'):
+            consumeKeyword(validator, 5);
             break;
         case ('n'):
-            consumeNull(validator);
+            consumeKeyword(validator, 4);
             break;
         default:
             consumeNumber(validator);
@@ -246,10 +232,7 @@ void consumeObject(validatorS* validator){
     }
 
     while (true){
-        printf("%c\n", validator -> currChar);
-        printf("%s\n", "test");
         consumeString(validator);
-        printf("%s\n", "test2");
         consumeWhiteSpace(validator);
 
         if (validator -> currChar == ':'){
