@@ -2,11 +2,15 @@
 
 enum error {
     INVALID_NUMBER,
-    INVALID_STRING,
+    NUMBER_NEVER_CLOSED,
+    STRING_NEVER_CLOSED,
     INVALID_ARRAY,
     INVALID_OBJECT,
+    INCOMPLETE_JSON,
     INVALID_JSON
 };
+
+enum error crash;
 
 // TODO -> add license once there is a working version, remove vs code folder too
 // Will get everything working initially then refactor everything for clarity and efficiency
@@ -91,7 +95,7 @@ void consumeWhiteSpace(validatorS* validator){
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeString(validatorS* validator){
+int consumeString(validatorS* validator){
 
     // startQuote (anyCharBut\* (\ any of -> quotes / \ b n f r t (u 4 hex digits)))  endQuote
     // \b = backspace
@@ -112,34 +116,48 @@ void consumeString(validatorS* validator){
 
     charAdvance(validator);
 
-    while (validator -> currChar != '"'){
-        charAdvance(validator);
-    } // could just go forever and get seg error, needs to be handled
+    while (true){
+        if (validator -> currChar == EOF){
+            return crash = STRING_NEVER_CLOSED;
+        } else if (validator -> currChar != '"'){
+            charAdvance(validator);
+        } else {
+            break;
+        }
+    }
 
     charAdvance(validator);
 
+    return -1;
+
 }
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeInt(validatorS* validator){
+int consumeInt(validatorS* validator){
 
     while(isdigit(validator -> currChar)){
-        charAdvance(validator);
+        if (validator -> currChar == EOF){
+            return crash = NUMBER_NEVER_CLOSED;
+        } else {
+            charAdvance(validator);
+        }
     }
+
+    return -1;
 
 }
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeNumber(validatorS* validator){ // GETTING COMPILER WARNING
+int consumeNumber(validatorS* validator){
 
     // number = -? [1..9] [0..9]* (. [0..9]*)? (e or E - or + [0..9]*)
     if (validator -> currChar == '-'){
         charAdvance(validator);
 
         if (isdigit(validator -> currChar) == false){
-            //throw numerical error
+            return crash = INVALID_NUMBER;
         } else{
             consumeInt(validator);
         }
@@ -151,38 +169,44 @@ void consumeNumber(validatorS* validator){ // GETTING COMPILER WARNING
         charAdvance(validator);
 
         if (validator -> currChar != '+' || validator -> currChar != '-'){
-            //throw numerical error
+            return crash = INVALID_NUMBER;
         } else{
             charAdvance(validator);
         }
 
         if (isdigit(validator -> currChar) == false){
-            //throw numerical error
+            return crash = INVALID_NUMBER;
         } else{
             consumeInt(validator);
         }
 
     }
 
-    // return error if one occurred
+    return -1;
 
 }
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeKeyword(validatorS* validator, int length){
+int consumeKeyword(validatorS* validator, int length){
 
    //bool = true or false
 
     for (int i = 0; i < length; i++){
-        charAdvance(validator);
+        if (validator -> currChar == EOF){
+            return crash = INCOMPLETE_JSON;
+        } else{
+            charAdvance(validator);
+        }
     }
+
+    return -1;
 
 }
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeValue(validatorS* validator){
+int consumeValue(validatorS* validator){
 
     //value = whitespace? object or array or string or number or bool or null whitespace?
 
@@ -199,26 +223,28 @@ void consumeValue(validatorS* validator){
             consumeArray(validator);
             break;
         case ('t'):
-            consumeKeyword(validator, 4);
+        if (consumeKeyword(validator, 4) != -1){ return crash;};
             break;
         case ('f'):
-            consumeKeyword(validator, 5);
+        if (consumeKeyword(validator, 5) != -1){ return crash;};
             break;
         case ('n'):
-            consumeKeyword(validator, 4);
+            if (consumeKeyword(validator, 4) != -1){ return crash;};
             break;
         default:
-            consumeNumber(validator);
+            if (consumeNumber(validator) != -1){ return crash;};
             break;
     }
 
     consumeWhiteSpace(validator);
 
+    return -1;
+
 }
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeObject(validatorS* validator){
+int consumeObject(validatorS* validator){
 
     //object = startCurly whitespace or
     //         (whitespace string whitespace? colon whitespace? value comma object*) endCurly
@@ -228,11 +254,11 @@ void consumeObject(validatorS* validator){
 
     if (validator -> currChar == '}'){
         charAdvance(validator);
-        return;
+        return -1;
     }
 
     while (true){
-        consumeString(validator);
+        if (consumeString(validator) != -1){ return crash;};
         consumeWhiteSpace(validator);
 
         if (validator -> currChar == ':'){
@@ -240,7 +266,7 @@ void consumeObject(validatorS* validator){
         } // else throw invalid object error
 
         consumeWhiteSpace(validator);
-        consumeValue(validator);
+        if (consumeValue(validator) != -1){ return crash;};
 
         if (validator -> currChar == ','){
             charAdvance(validator);
@@ -248,22 +274,24 @@ void consumeObject(validatorS* validator){
         } else if (validator -> currChar == '}'){
             consumeWhiteSpace(validator);
             charAdvance(validator);
-            return;
-        } // else throw invalid object error
+            return -1;
+        } else{
+            return crash = INVALID_OBJECT;
+        }
     }
 
 }
 
 // --------------------------------------------------------------------------------------------- //
 
-void consumeArray(validatorS* validator){
+int consumeArray(validatorS* validator){
 
     //array = startSquare whitespace or (value comma)* endSquare
 
     charAdvance(validator);
     consumeWhiteSpace(validator); // check for first char being '[' has already been done
     while (validator -> currChar != ']'){
-        consumeValue(validator);
+        if (consumeValue(validator) != -1){ return crash;};
         if (validator -> currChar == ','){
             charAdvance(validator);
             consumeWhiteSpace(validator);
@@ -272,23 +300,27 @@ void consumeArray(validatorS* validator){
 
     charAdvance(validator);
 
+    return -1;
+
 }
 
 // --------------------------------------------------------------------------------------------- //
 
-void validateJSON(validatorS* validator){
+int validateJSON(validatorS* validator){
 
     //validJSON = whitespace? (array or object) whitespace? validJSON*
 
     consumeWhiteSpace(validator);
 
     if (validator -> currChar == '{'){
-        consumeObject(validator);
+        if (consumeObject(validator) != -1){ return crash;};
     } else if (validator -> currChar == '['){
-        consumeArray(validator);
+        if (consumeArray(validator) != -1){ return crash;};
     }
 
     consumeWhiteSpace(validator);
+
+    return -1;
 
 }
 
@@ -302,7 +334,11 @@ int main(){
 
     validatorS* validator = initValidator(jsonContent);
 
-    validateJSON(validator);
+    if (validateJSON(validator) != -1){
+        printf("%d\n", crash);
+    } else {
+        printf("%s\n", "Input JSON is valid");
+    }
 
     printf("%s\n", jsonContent);
 

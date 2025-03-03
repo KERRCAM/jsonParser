@@ -25,21 +25,21 @@ void charAdvance(validatorS* validator);
 
 void consumeWhiteSpace(validatorS* validator);
 
-void consumeString(validatorS* validator);
+int consumeString(validatorS* validator);
 
-void consumeInt(validatorS* validator);
+int consumeInt(validatorS* validator);
 
-void consumeNumber(validatorS* validator);
+int consumeNumber(validatorS* validator);
 
-void consumeKeyword(validatorS* validator, int length);
+int consumeKeyword(validatorS* validator, int length);
 
-void consumeValue(validatorS* validator);
+int consumeValue(validatorS* validator);
 
-void consumeObject(validatorS* validator);
+int consumeObject(validatorS* validator);
 
-void consumeArray(validatorS* validator);
+int consumeArray(validatorS* validator);
 
-void validateJSON(validatorS* validator);
+int validateJSON(validatorS* validator);
 
 int main();
 
