@@ -1,10 +1,10 @@
 #include "include/jsonParse.h"
 
-enum error {
+enum error { // need error handling for closing an array or object or string that was never opened
     INVALID_NUMBER,
     NUMBER_NEVER_CLOSED,
     STRING_NEVER_CLOSED,
-    INVALID_ARRAY,
+    ARRAY_NEVER_CLOSED,
     INVALID_OBJECT,
     INCOMPLETE_JSON,
     INVALID_JSON
@@ -68,7 +68,7 @@ char* loadJsonStaggered(char* filename, int lastRead){ // maybe needed maybe not
 
 // --------------------------------------------------------------------------------------------- //
 
-void charAdvance(validatorS* validator){ //make it get rawJSOn and not it be a param
+void charAdvance(validatorS* validator){ //make it get rawJSON and not it be a param
 
     //currPos + 1
     //update currChar
@@ -117,9 +117,8 @@ int consumeString(validatorS* validator){
     charAdvance(validator);
 
     while (true){
-        if (validator -> currChar == EOF){
-            return crash = STRING_NEVER_CLOSED;
-        } else if (validator -> currChar != '"'){
+        if (validator -> currChar == EOF){ return crash = STRING_NEVER_CLOSED;}
+        if (validator -> currChar != '"'){
             charAdvance(validator);
         } else {
             break;
@@ -137,12 +136,9 @@ int consumeString(validatorS* validator){
 int consumeInt(validatorS* validator){
 
     while(isdigit(validator -> currChar)){
-        if (validator -> currChar == EOF){
-            return crash = NUMBER_NEVER_CLOSED;
-        } else {
-            charAdvance(validator);
+        if (validator -> currChar == EOF){ return crash = NUMBER_NEVER_CLOSED;}
+        charAdvance(validator);
         }
-    }
 
     return -1;
 
@@ -214,13 +210,13 @@ int consumeValue(validatorS* validator){
 
     switch (validator -> currChar){
         case ('"'):
-            consumeString(validator);
+            if (consumeString(validator) != -1){ return crash;};
             break;
         case ('{'):
-            consumeObject(validator);
+            if (consumeObject(validator) != -1){ return crash;};
             break;
         case ('['):
-            consumeArray(validator);
+            if (consumeArray(validator) != -1){ return crash;};
             break;
         case ('t'):
         if (consumeKeyword(validator, 4) != -1){ return crash;};
@@ -290,11 +286,16 @@ int consumeArray(validatorS* validator){
 
     charAdvance(validator);
     consumeWhiteSpace(validator); // check for first char being '[' has already been done
-    while (validator -> currChar != ']'){
+    while (true){
         if (consumeValue(validator) != -1){ return crash;};
         if (validator -> currChar == ','){
             charAdvance(validator);
             consumeWhiteSpace(validator);
+        }
+        if (validator -> currChar == ']'){
+            return -1;
+        } else {
+            return crash = ARRAY_NEVER_CLOSED;
         }
     }
 
