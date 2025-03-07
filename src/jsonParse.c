@@ -10,12 +10,24 @@ enum error { // need error handling for closing an array or object or string tha
     INVALID_JSON
 };
 
+const char errorMessage[7][24] = {
+    "Invalid number",
+    "Number never closed",
+    "String never closed",
+    "Array never closed",
+    "Invalid object",
+    "Incomplete JSON",
+    "Invalid JSON",
+};
+
 enum error crash;
 
 // TODO -> add license once there is a working version, remove vs code folder too
 // Will get everything working initially then refactor everything for clarity and efficiency
 
-// --------------------------------------------------------------------------------------------- //
+// TODO -> add line returns for errors in validation
+
+// --------------------------------------------------------------------------------------------- //F
 
 validatorS* initValidator(char* jsonContent){
 
@@ -23,6 +35,8 @@ validatorS* initValidator(char* jsonContent){
     validator -> i = 0;
     validator -> rawJSON = jsonContent;
     validator -> currChar = jsonContent[0];
+    validator -> lineCrash = 0;
+    validator -> column = 0;
 
     return validator;
 }
@@ -75,6 +89,7 @@ void charAdvance(validatorS* validator){ //make it get rawJSON and not it be a p
 
     validator -> i += 1;
     validator -> currChar = validator -> rawJSON[validator -> i];
+    validator -> column += 1;
 
 }
 
@@ -88,6 +103,10 @@ void consumeWhiteSpace(validatorS* validator){
             || validator -> currChar == '\n'
             || validator -> currChar == '\r'
             || validator -> currChar == '\t'){ //need to fix types
+        if (validator -> currChar == '\n'){
+            validator -> lineCrash += 1;
+            validator -> column = 0;
+        }
         charAdvance(validator);
     }
 
@@ -268,8 +287,8 @@ int consumeObject(validatorS* validator){
             charAdvance(validator);
             consumeWhiteSpace(validator);
         } else if (validator -> currChar == '}'){
-            consumeWhiteSpace(validator);
             charAdvance(validator);
+            consumeWhiteSpace(validator);
             return -1;
         } else{
             return crash = INVALID_OBJECT;
@@ -295,7 +314,7 @@ int consumeArray(validatorS* validator){
         if (validator -> currChar == ']'){
             return -1;
         } else {
-            return crash = ARRAY_NEVER_CLOSED;
+            return crash = ARRAY_NEVER_CLOSED; // BROKEN APPARENTLY
         }
     }
 
@@ -336,12 +355,10 @@ int main(){
     validatorS* validator = initValidator(jsonContent);
 
     if (validateJSON(validator) != -1){
-        printf("%d\n", crash);
+        printf("ERROR: %s at line %d, column %d\n", errorMessage[crash], validator -> lineCrash, validator -> column);
     } else {
-        printf("%s\n", "Input JSON is valid");
+        printf("%s\n", "Input JSON is valid\n");
     }
-
-    printf("%s\n", jsonContent);
 
     return 0;
 
