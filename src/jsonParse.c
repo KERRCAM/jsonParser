@@ -10,7 +10,7 @@ enum error { // need error handling for closing an array or object or string tha
     INVALID_JSON
 };
 
-const char errorMessage[7][24] = {
+const char errorMessage[7][20] = {
     "Invalid number",
     "Number never closed",
     "String never closed",
@@ -43,7 +43,7 @@ validatorS* initValidator(char* jsonContent){
 
 // --------------------------------------------------------------------------------------------- //
 
-char* loadJSON(char* filename){ // could do with some refactoring
+char* loadJSON(char* filename){
 
     char * buffer = 0;
     long length;
@@ -82,10 +82,9 @@ char* loadJsonStaggered(char* filename, int lastRead){ // maybe needed maybe not
 
 // --------------------------------------------------------------------------------------------- //
 
-void charAdvance(validatorS* validator){ //make it get rawJSON and not it be a param
+void charAdvance(validatorS* validator){
 
-    //currPos + 1
-    //update currChar
+    // Increments validator position and column and updates the current char
 
     validator -> i += 1;
     validator -> currChar = validator -> rawJSON[validator -> i];
@@ -102,7 +101,7 @@ void consumeWhiteSpace(validatorS* validator){
     while (    validator -> currChar == ' '
             || validator -> currChar == '\n'
             || validator -> currChar == '\r'
-            || validator -> currChar == '\t'){ //need to fix types
+            || validator -> currChar == '\t'){
         if (validator -> currChar == '\n'){
             validator -> lineCrash += 1;
             validator -> column = 0;
@@ -205,7 +204,7 @@ int consumeNumber(validatorS* validator){
 
 int consumeKeyword(validatorS* validator, int length){
 
-   //bool = true or false
+   // bool = true or false
 
     for (int i = 0; i < length; i++){
         if (validator -> currChar == EOF){
@@ -223,7 +222,7 @@ int consumeKeyword(validatorS* validator, int length){
 
 int consumeValue(validatorS* validator){
 
-    //value = whitespace? object or array or string or number or bool or null whitespace?
+    // value = whitespace? object or array or string or number or bool or null whitespace?
 
     consumeWhiteSpace(validator);
 
@@ -261,8 +260,8 @@ int consumeValue(validatorS* validator){
 
 int consumeObject(validatorS* validator){
 
-    //object = startCurly whitespace or
-    //         (whitespace string whitespace? colon whitespace? value comma object*) endCurly
+    // object = startCurly whitespace or
+    //          (whitespace string whitespace? colon whitespace? value comma object*) endCurly
 
     charAdvance(validator);
     consumeWhiteSpace(validator);
@@ -301,7 +300,7 @@ int consumeObject(validatorS* validator){
 
 int consumeArray(validatorS* validator){
 
-    //array = startSquare whitespace or (value comma)* endSquare
+    // array = startSquare whitespace or (value comma)* endSquare
 
     charAdvance(validator);
     consumeWhiteSpace(validator); // check for first char being '[' has already been done
@@ -314,7 +313,7 @@ int consumeArray(validatorS* validator){
         if (validator -> currChar == ']'){
             return -1;
         } else {
-            return crash = ARRAY_NEVER_CLOSED; // BROKEN APPARENTLY
+            return crash = ARRAY_NEVER_CLOSED; //           ------------------------                               *  BROKEN APPARENTLY *                               ------------------------
         }
     }
 
@@ -328,7 +327,7 @@ int consumeArray(validatorS* validator){
 
 int validateJSON(validatorS* validator){
 
-    //validJSON = whitespace? (array or object) whitespace? validJSON*
+    // validJSON = whitespace? (array or object) whitespace? validJSON*
 
     consumeWhiteSpace(validator);
 
@@ -355,7 +354,10 @@ int main(){
     validatorS* validator = initValidator(jsonContent);
 
     if (validateJSON(validator) != -1){
-        printf("ERROR: %s at line %d, column %d\n", errorMessage[crash], validator -> lineCrash, validator -> column);
+        printf(
+            "ERROR: %s at line %d, column %d\n",
+            errorMessage[crash], validator -> lineCrash, validator -> column
+        );
     } else {
         printf("%s\n", "Input JSON is valid\n");
     }
