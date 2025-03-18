@@ -38,6 +38,9 @@ validatorS* initValidator(char* jsonContent){
     validator -> lineCrash = 0;
     validator -> column = 0;
 
+    // Add an error flag and error message here -> can then just check flag at end and print error if there was one
+    // also check flag before moving on i guess
+
     return validator;
 }
 
@@ -277,7 +280,9 @@ int consumeObject(validatorS* validator){
 
         if (validator -> currChar == ':'){
             charAdvance(validator);
-        } // else throw invalid object error
+        } else{
+            return crash = INVALID_OBJECT;
+        }
 
         consumeWhiteSpace(validator);
         if (consumeValue(validator) != -1){ return crash;};
