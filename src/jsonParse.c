@@ -321,7 +321,7 @@ int consumeArray(validatorS* validator){
     if (validator -> currChar == ']'){
         return -1;
     } else {
-        return crash = ARRAY_NEVER_CLOSED; //           ------------------------                               *  BROKEN APPARENTLY *                               ------------------------
+        return crash = ARRAY_NEVER_CLOSED;
     }
 
     charAdvance(validator);
