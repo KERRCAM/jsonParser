@@ -212,9 +212,8 @@ int consumeKeyword(validatorS* validator, int length){
     for (int i = 0; i < length; i++){
         if (validator -> currChar == EOF){
             return crash = INCOMPLETE_JSON;
-        } else{
-            charAdvance(validator);
         }
+        charAdvance(validator);
     }
 
     return -1;
@@ -314,12 +313,15 @@ int consumeArray(validatorS* validator){
         if (validator -> currChar == ','){
             charAdvance(validator);
             consumeWhiteSpace(validator);
+        } else{
+            break;
         }
-        if (validator -> currChar == ']'){
-            return -1;
-        } else {
-            return crash = ARRAY_NEVER_CLOSED; //           ------------------------                               *  BROKEN APPARENTLY *                               ------------------------
-        }
+    }
+
+    if (validator -> currChar == ']'){
+        return -1;
+    } else {
+        return crash = ARRAY_NEVER_CLOSED; //           ------------------------                               *  BROKEN APPARENTLY *                               ------------------------
     }
 
     charAdvance(validator);
