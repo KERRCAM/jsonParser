@@ -1,4 +1,5 @@
 #include "include/jsonParse.h"
+#include <time.h>
 
 enum error { // need error handling for closing an array or object or string that was never opened
     INVALID_NUMBER,
@@ -7,10 +8,11 @@ enum error { // need error handling for closing an array or object or string tha
     ARRAY_NEVER_CLOSED,
     INVALID_OBJECT,
     INCOMPLETE_JSON,
-    INVALID_JSON
+    INVALID_JSON,
+    INVALID_STRING
 };
 
-const char errorMessage[7][20] = {
+const char errorMessage[8][20] = {
     "Invalid number",
     "Number never closed",
     "String never closed",
@@ -18,6 +20,7 @@ const char errorMessage[7][20] = {
     "Invalid object",
     "Incomplete JSON",
     "Invalid JSON",
+    "Invalid string"
 };
 
 enum error crash;
@@ -139,6 +142,12 @@ int consumeString(validatorS* validator){
 
     while (true){
         if (validator -> currChar == EOF){ return crash = STRING_NEVER_CLOSED;}
+        if (validator -> currChar == '\\'){
+            charAdvance(validator);
+            if (validator -> currChar == '"'){
+                charAdvance(validator);
+            } else { return crash = INVALID_STRING;}
+        }
         if (validator -> currChar != '"'){
             charAdvance(validator);
         } else {
@@ -156,6 +165,7 @@ int consumeString(validatorS* validator){
 
 int consumeInt(validatorS* validator){
 
+    // [1..9]*
     while(isdigit(validator -> currChar)){
         if (validator -> currChar == EOF){ return crash = NUMBER_NEVER_CLOSED;}
         charAdvance(validator);
@@ -207,7 +217,7 @@ int consumeNumber(validatorS* validator){
 
 int consumeKeyword(validatorS* validator, int length){
 
-   // bool = true or false
+   // true, false, null
 
     for (int i = 0; i < length; i++){
         if (validator -> currChar == EOF){
@@ -319,14 +329,11 @@ int consumeArray(validatorS* validator){
     }
 
     if (validator -> currChar == ']'){
+        charAdvance(validator);
         return -1;
     } else {
         return crash = ARRAY_NEVER_CLOSED;
     }
-
-    charAdvance(validator);
-
-    return -1;
 
 }
 
@@ -354,7 +361,12 @@ int validateJSON(validatorS* validator){
 
 int main(){
 
-    char* filename = "src/testFiles/test.json";
+    double time, diff;
+    time = (double) clock();
+    time = time / CLOCKS_PER_SEC;
+
+    // char* filename = "src/testFiles/test.json";
+    char* filename = "src/testFiles/Streaming_History_Audio_2023_13.json";
 
     char* jsonContent = loadJSON(filename);
 
@@ -366,8 +378,19 @@ int main(){
             errorMessage[crash], validator -> lineCrash, validator -> column
         );
     } else {
-        printf("%s\n", "Input JSON is valid\n");
+        printf("%s\n", "Input JSON is valid");
     }
+
+    diff = ( ((double) clock()) / CLOCKS_PER_SEC) - time;
+    printf("Program run time = %lf seconds\n", diff);
+
+    /*
+    PARSER PLAN:
+    Work off of depth
+    First accessible part is just all the values depth one, as a list?
+    Can then access in those values their sub values depth 2 etc etc
+    Dynamically build the structs as lists maybe, something like that so its iterable
+    */
 
     return 0;
 
