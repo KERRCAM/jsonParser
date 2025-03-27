@@ -1,34 +1,12 @@
-#include "include/jsonParse.h"
-#include <time.h>
+// LOCAL IMPORTS
+#include "include/validator.h"
 
-enum error { // need error handling for closing an array or object or string that was never opened
-    INVALID_NUMBER,
-    NUMBER_NEVER_CLOSED,
-    STRING_NEVER_CLOSED,
-    ARRAY_NEVER_CLOSED,
-    INVALID_OBJECT,
-    INCOMPLETE_JSON,
-    INVALID_JSON,
-    INVALID_STRING
-};
-
-const char errorMessage[8][20] = {
-    "Invalid number",
-    "Number never closed",
-    "String never closed",
-    "Array never closed",
-    "Invalid object",
-    "Incomplete JSON",
-    "Invalid JSON",
-    "Invalid string"
-};
-
-enum error crash;
+// --------------------------------------------------------------------------------------------- //
 
 // TODO -> add license once there is a working version, remove vs code folder too
 // Will get everything working initially then refactor everything for clarity and efficiency
 
-// TODO -> add line returns for errors in validation
+enum error crash;
 
 // --------------------------------------------------------------------------------------------- //
 
@@ -390,6 +368,9 @@ int main(){
     First accessible part is just all the values depth one, as a list?
     Can then access in those values their sub values depth 2 etc etc
     Dynamically build the structs as lists maybe, something like that so its iterable
+
+    Once parsed we can build some utility functions to go with the library.
+    For examples depths and sizes and sorts and searches etc.
     */
 
     return 0;

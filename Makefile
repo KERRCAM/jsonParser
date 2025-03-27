@@ -1,5 +1,4 @@
 
-
 build:
 	gcc src/*.c -o buildTest/parser
 
