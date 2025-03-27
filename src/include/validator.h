@@ -21,16 +21,7 @@ enum error {
     INVALID_STRING
 };
 
-const char errorMessage[8][20] = {
-    "Invalid number",
-    "Number never closed",
-    "String never closed",
-    "Array never closed",
-    "Invalid object",
-    "Incomplete JSON",
-    "Invalid JSON",
-    "Invalid string"
-};
+enum error crash;
 
 //-----------------------------------------------------------------------------------------------//
 //STRUCTS
@@ -71,7 +62,5 @@ int consumeObject(validatorS* validator);
 int consumeArray(validatorS* validator);
 
 int validateJSON(validatorS* validator);
-
-int main();
 
 //-----------------------------------------------------------------------------------------------//

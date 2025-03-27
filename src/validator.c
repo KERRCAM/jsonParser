@@ -6,8 +6,6 @@
 // TODO -> add license once there is a working version, remove vs code folder too
 // Will get everything working initially then refactor everything for clarity and efficiency
 
-enum error crash;
-
 // --------------------------------------------------------------------------------------------- //
 
 validatorS* initValidator(char* jsonContent){
@@ -18,9 +16,6 @@ validatorS* initValidator(char* jsonContent){
     validator -> currChar = jsonContent[0];
     validator -> lineCrash = 0;
     validator -> column = 0;
-
-    // Add an error flag and error message here -> can then just check flag at end and print error if there was one
-    // also check flag before moving on i guess
 
     return validator;
 }
@@ -332,48 +327,6 @@ int validateJSON(validatorS* validator){
     consumeWhiteSpace(validator);
 
     return -1;
-
-}
-
-// --------------------------------------------------------------------------------------------- //
-
-int main(){
-
-    double time, diff;
-    time = (double) clock();
-    time = time / CLOCKS_PER_SEC;
-
-    // char* filename = "src/testFiles/test.json";
-    char* filename = "src/testFiles/Streaming_History_Audio_2023_13.json";
-
-    char* jsonContent = loadJSON(filename);
-
-    validatorS* validator = initValidator(jsonContent);
-
-    if (validateJSON(validator) != -1){
-        printf(
-            "ERROR: %s at line %d, column %d\n",
-            errorMessage[crash], validator -> lineCrash, validator -> column
-        );
-    } else {
-        printf("%s\n", "Input JSON is valid");
-    }
-
-    diff = ( ((double) clock()) / CLOCKS_PER_SEC) - time;
-    printf("Program run time = %lf seconds\n", diff);
-
-    /*
-    PARSER PLAN:
-    Work off of depth
-    First accessible part is just all the values depth one, as a list?
-    Can then access in those values their sub values depth 2 etc etc
-    Dynamically build the structs as lists maybe, something like that so its iterable
-
-    Once parsed we can build some utility functions to go with the library.
-    For examples depths and sizes and sorts and searches etc.
-    */
-
-    return 0;
 
 }
 
