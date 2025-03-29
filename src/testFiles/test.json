@@ -1,44 +1,27 @@
-[
-    {
-        "ts": "2017-08-01T21:17:20Z",
-        "platform": "iOS 10.3.2 (iPhone6,2)",
-        "ms_played": 15348,
-        "conn_country": "GB",
-        "master_metadata_track_name": "Sweet Dreams (Are Made of This) - 2005 Remaster",
-        "master_metadata_album_artist_name": "Eurythmics",
-        "master_metadata_album_album_name": "Sweet Dreams (Are Made Of This)",
-        "spotify_track_uri": "spotify:track:1TfqLAPs4K3s2rJMoCokcS",
-        "episode_name": null,
-        "episode_show_name": null,
-        "spotify_episode_uri": null,
-        "reason_start": "clickrow",
-        "reason_end": "endplay",
-        "shuffle": false,
-        "skipped": false,
-        "offline": false,
-        "offline_timestamp": null,
-        "incognito_mode": false
-    },
-    {
-        "ts": "2024-05-08T23:58:11Z",
-        "platform": "ios",
-        "ms_played": 365440,
-        "conn_country": "GB",
-        "master_metadata_track_name": "The Poetic Edda",
-        "master_metadata_album_artist_name": "Synestia",
-        "master_metadata_album_album_name": "The Poetic Edda (Singles)",
-        "spotify_track_uri": "spotify:track:42eJ4p6e2MkmwKcLuMU1Ve",
-        "episode_name": null,
-        "episode_show_name": null,
-        "spotify_episode_uri": null,
-        "reason_start": "clickrow",
-        "reason_end": "trackdone",
-        "shuffle": true,
-        "skipped": false,
-        "offline": false,
-        "offline_timestamp": 1715212326,
-        "incognito_mode": false
-    }
-]
-
-
+{"menu": {
+    "header": "SVG Viewer",
+    "items": [
+        {"id": "Open"},
+        {"id": "OpenNew", "label": "Open New"},
+        null,
+        {"id": "ZoomIn", "label": "Zoom In"},
+        {"id": "ZoomOut", "label": "Zoom Out"},
+        {"id": "OriginalView", "label": "Original View"},
+        null,
+        {"id": "Quality"},
+        {"id": "Pause"},
+        {"id": "Mute"},
+        null,
+        {"id": "Find", "label": "Find..."},
+        {"id": "FindAgain", "label": "Find Again"},
+        {"id": "Copy"},
+        {"id": "CopyAgain", "label": "Copy Again"},
+        {"id": "CopySVG", "label": "Copy SVG"},
+        {"id": "ViewSVG", "label": "View SVG"},
+        {"id": "ViewSource", "label": "View Source"},
+        {"id": "SaveAs", "label": "Save As"},
+        null,
+        {"id": "Help"},
+        {"id": "About", "label": "About Adobe CVG Viewer..."}
+    ]
+}}
