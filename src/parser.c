@@ -41,6 +41,7 @@ struct jsonS* parseJSON(parserS* parser){
 
     struct jsonS* json;
 
+    
 
     return json;
 
@@ -57,7 +58,7 @@ int main(){
     time = time / CLOCKS_PER_SEC;
 
     // char* filename = "src/testFiles/test.json";
-    char* filename = "src/testFiles/test.json";
+    char* filename = "src/testFiles/Streaming_History_Audio_2023_13.json";
 
     char* jsonContent = loadJSON(filename);
 
