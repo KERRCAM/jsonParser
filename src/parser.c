@@ -17,7 +17,14 @@ parserS* initParser(char* jsonContent){
 
 //-----------------------------------------------------------------------------------------------//
 
+void charAdvanceP(parserS* parser){
 
+    // Increments validator position and column and updates the current char
+
+    parser -> i += 1;
+    parser -> currChar = parser -> rawJSON[parser -> i];
+
+}
 
 //-----------------------------------------------------------------------------------------------//
 
