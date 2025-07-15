@@ -61,6 +61,6 @@ int consumeObject(validatorS* validator);
 
 int consumeArray(validatorS* validator);
 
-int validateJSON(validatorS* validator);
+int validateFile(validatorS* validator);
 
 //-----------------------------------------------------------------------------------------------//

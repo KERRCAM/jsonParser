@@ -312,7 +312,7 @@ int consumeArray(validatorS* validator){
 
 // --------------------------------------------------------------------------------------------- //
 
-int validateJSON(validatorS* validator){
+int validateFile(validatorS* validator){
 
     // validJSON = whitespace? (array or object) whitespace? validJSON*
 

@@ -44,11 +44,11 @@ void parserAdvance(parserS* parser){
 
 //-----------------------------------------------------------------------------------------------//
 
-struct jsonS* parseJSON(parserS* parser){
+struct jsonNode* parseJSON(parserS* parser){
 
-    struct jsonS* json;
+    struct jsonNode* json;
 
-    
+    // initial type check -> call corresponding funcs
 
     return json;
 
@@ -71,7 +71,7 @@ int main(){
 
     validatorS* validator = initValidator(jsonContent);
 
-    if (validateJSON(validator) != -1){
+    if (validateFile(validator) != -1){
         printf(
             "ERROR: %s at line %d, column %d\n",
             errorMessage[crash], validator -> lineCrash, validator -> column
@@ -83,7 +83,6 @@ int main(){
 
     if (valid == true){
         parserS* parser = initParser(jsonContent);
-        struct jsonS* json = parseJSON(parser);
     }
 
     diff = ( ((double) clock()) / CLOCKS_PER_SEC) - time;
@@ -98,3 +97,10 @@ int main(){
 // TODO
 // Build up json as a tree structure adding info at each part
 // Can then be pretty easily navigated with tree operations and not bad searches, sorts etc.
+
+/*
+- new node
+- add node ?
+- not all nodes have values -> lists, objects
+Either have a node be the atomic pieces or have a node store the whole object, arrray etc as various structs
+*/
