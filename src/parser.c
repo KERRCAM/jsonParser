@@ -94,3 +94,7 @@ int main(){
 }
 
 //-----------------------------------------------------------------------------------------------//
+
+// TODO
+// Build up json as a tree structure adding info at each part
+// Can then be pretty easily navigated with tree operations and not bad searches, sorts etc.

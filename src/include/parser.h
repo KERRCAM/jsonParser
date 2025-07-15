@@ -29,16 +29,12 @@ typedef struct PARSER_STRUCT{
     int column;
 } parserS;
 
-struct jsonV{
+struct jsonNode{
     char* type;
     char* value;
-    int parent;
-};
-
-struct jsonS{
-    char* type;
-    char* value;
-    struct jsonV nodes[];
+    int nodeType; // -1 is root, 0 is default, 1 is leaf
+    struct jsonNode* parent;
+    struct jsonNode* children[10]; // TBD
 };
 
 //-----------------------------------------------------------------------------------------------//
