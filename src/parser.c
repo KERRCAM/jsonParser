@@ -42,10 +42,22 @@ void parserAdvance(parserS* parser){
 
 struct jsonNode* newNode(struct jsonNode* parent, char* data[]){
 
+    struct jsonNode* newNode;
+
     // takes all data as the full char* i.e. string still has the quotes
     // determine type in this func, then strip anything like quotes
     // store data as void with a char* type specifier
     // when data is pulled it will look at type then cast appropriately
+
+    // set parent attr
+    // call type check on data
+    // change data accordingly
+    // set type and data attrs
+    // look for children
+    // add children if exist
+    // set node type attr
+
+    return newNode;
 
 }
 
