@@ -40,7 +40,14 @@ void parserAdvance(parserS* parser){
 
 //-----------------------------------------------------------------------------------------------//
 
+struct jsonNode* newNode(struct jsonNode* parent, char* data[]){
 
+    // takes all data as the full char* i.e. string still has the quotes
+    // determine type in this func, then strip anything like quotes
+    // store data as void with a char* type specifier
+    // when data is pulled it will look at type then cast appropriately
+
+}
 
 //-----------------------------------------------------------------------------------------------//
 
@@ -49,6 +56,10 @@ struct jsonNode* parseJSON(parserS* parser){
     struct jsonNode* json;
 
     // initial type check -> call corresponding funcs
+    /*
+    for potential node in layer:
+        recursive call
+    */
 
     return json;
 

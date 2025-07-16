@@ -31,7 +31,7 @@ typedef struct PARSER_STRUCT{
 
 struct jsonNode{
     char* type;
-    char* value;
+    void* value;
     int nodeType; // -1 is root, 0 is default, 1 is leaf
     struct jsonNode* parent;
     struct jsonNode* children[10]; // TBD
@@ -40,6 +40,6 @@ struct jsonNode{
 //-----------------------------------------------------------------------------------------------//
 // FUNCTIONS
 
-
+struct jsonNode* newNode(struct jsonNode* parent, char* data[]);
 
 //-----------------------------------------------------------------------------------------------//
